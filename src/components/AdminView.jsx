@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container, Typography, Card, CardContent, CardActions, Slide, Box } from '@mui/material';
+import { Button, Container, Typography, Card, CardContent, CardActions, Slide, Box, Grid } from '@mui/material';
 import { styled } from '@mui/system';
 
 const AdminView = () => {
@@ -31,10 +31,13 @@ const AdminView = () => {
       boxShadow: '0 10px 20px rgba(0, 0, 0, 0.15)',
     },
     marginBottom: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      marginBottom: theme.spacing(1),
+    },
   }));
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="lg">
       <Typography variant="h4" gutterBottom>
         Admin View
       </Typography>
@@ -43,25 +46,29 @@ const AdminView = () => {
       </Button>
       <Slide direction="down" in={showFeedbacks} mountOnEnter unmountOnExit>
         <Box sx={{ mt: 3 }}>
-          {feedbacks.map((feedback, index) => (
-            <FeedbackCard key={index}>
-              <CardContent>
-                <Typography variant="h6">{feedback.name}</Typography>
-                <Typography color="textSecondary" variant="body2">
-                  {`Email: ${feedback.email}`}
-                </Typography>
-                <Typography variant="body1" paragraph>
-                  Feedback: {feedback.feedback}
-                </Typography>
-                <Typography variant="caption" color="textSecondary">
-                  Submitted on: {new Date(feedback.timestamp).toLocaleString()}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                {/* Optional actions like "Delete" or "Reply" could go here */}
-              </CardActions>
-            </FeedbackCard>
-          ))}
+          <Grid container spacing={2}>
+            {feedbacks.map((feedback, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <FeedbackCard>
+                  <CardContent>
+                    <Typography variant="h6">{feedback.name}</Typography>
+                    <Typography color="textSecondary" variant="body2">
+                      {`Email: ${feedback.email}`}
+                    </Typography>
+                    <Typography variant="body1" paragraph>
+                      Feedback: {feedback.feedback}
+                    </Typography>
+                    <Typography variant="caption" color="textSecondary">
+                      Submitted on: {new Date(feedback.timestamp).toLocaleString()}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    {/* Optional actions like "Delete" or "Reply" could go here */}
+                  </CardActions>
+                </FeedbackCard>
+              </Grid>
+            ))}
+          </Grid>
         </Box>
       </Slide>
     </Container>

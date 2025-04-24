@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { useMemo, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import FeedbackForm from './components/FeedbackForm';
@@ -10,11 +9,13 @@ import {
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const drawerWidth = 240;
 
 const App = () => {
   const [mode, setMode] = useState('light');
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const colorMode = {
     toggleColorMode: () => {
@@ -45,6 +46,10 @@ const App = () => {
     [mode]
   );
 
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -56,20 +61,30 @@ const App = () => {
               <Typography variant="h6" noWrap component="div">
                 Feedback Collector
               </Typography>
-              <IconButton color="inherit" onClick={colorMode.toggleColorMode}>
-                {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-              </IconButton>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <IconButton color="inherit" onClick={colorMode.toggleColorMode}>
+                  {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                </IconButton>
+                <IconButton
+                  color="inherit"
+                  sx={{ display: { sm: 'none', xs: 'inline-flex' } }}
+                  onClick={handleDrawerToggle}
+                >
+                  <MenuIcon />
+                </IconButton>
+              </Box>
             </Toolbar>
           </AppBar>
 
           <Box sx={{ display: 'flex', flex: 1 }}>
             {/* Sidebar with 3D effects */}
             <Drawer
-              variant="permanent"
+              variant="temporary"
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
               sx={{
-                width: drawerWidth,
-                flexShrink: 0,
-                [`& .MuiDrawer-paper`]: {
+                display: { xs: 'block', sm: 'none' },
+                '& .MuiDrawer-paper': {
                   width: drawerWidth,
                   boxSizing: 'border-box',
                   background: mode === 'dark' ? '#1e1e2f' : '#f9f9f9',
@@ -80,27 +95,17 @@ const App = () => {
             >
               <Toolbar />
               <List>
-                <ListItem
-                  button
-                  component={Link}
-                  to="/"
-                  sx={{ transition: 'transform 0.2s', '&:hover': { transform: 'scale(1.05)' } }}
-                >
+                <ListItem button component={Link} to="/" sx={{ transition: 'transform 0.2s', '&:hover': { transform: 'scale(1.05)' } }}>
                   <ListItemText primary="Feedback Form" />
                 </ListItem>
-                <ListItem
-                  button
-                  component={Link}
-                  to="/admin"
-                  sx={{ transition: 'transform 0.2s', '&:hover': { transform: 'scale(1.05)' } }}
-                >
+                <ListItem button component={Link} to="/admin" sx={{ transition: 'transform 0.2s', '&:hover': { transform: 'scale(1.05)' } }}>
                   <ListItemText primary="Admin View" />
                 </ListItem>
               </List>
             </Drawer>
 
             {/* Main Content */}
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <Box component="main" sx={{ flexGrow: 1, p: 3, width: { xs: '100%', sm: 'calc(100% - 240px)' } }}>
               <Toolbar />
               <Paper elevation={3} sx={{ p: 2, borderRadius: 3 }}>
                 <Routes>

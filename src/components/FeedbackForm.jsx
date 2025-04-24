@@ -1,6 +1,6 @@
-// src/components/FeedbackForm.jsx
 import React, { useState } from 'react';
-import { TextField, Button, CircularProgress, Container, Typography, Slide } from '@mui/material';
+import { TextField, Button, CircularProgress, Container, Typography, Slide, Box } from '@mui/material';
+import { styled } from '@mui/system';
 
 const FeedbackForm = () => {
   const [formData, setFormData] = useState({ name: '', email: '', feedback: '' });
@@ -46,57 +46,77 @@ const FeedbackForm = () => {
     }
   };
 
+  // Styled Box to add responsiveness
+  const FormBox = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      padding: theme.spacing(2),
+    },
+  }));
+
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" gutterBottom>
         Feedback Form
       </Typography>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Full Name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-          error={!!errors.name}
-          helperText={errors.name}
-        />
-        <TextField
-          label="Email"
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-          error={!!errors.email}
-          helperText={errors.email}
-        />
-        <TextField
-          label="Feedback"
-          name="feedback"
-          value={formData.feedback}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          multiline
-          rows={4}
-          required
-          error={!!errors.feedback}
-          helperText={errors.feedback}
-        />
-        <Button type="submit" variant="contained" color="primary" disabled={loading}>
-          {loading ? <CircularProgress size={24} /> : 'Submit'}
-        </Button>
-      </form>
-      <Slide direction="up" in={submitted} mountOnEnter unmountOnExit>
-        <Typography variant="body1" style={{ marginTop: '20px' }}>
-          Thank you for your feedback!
-        </Typography>
-      </Slide>
+      <FormBox>
+        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+          <TextField
+            label="Full Name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+            error={!!errors.name}
+            helperText={errors.name}
+          />
+          <TextField
+            label="Email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+            error={!!errors.email}
+            helperText={errors.email}
+          />
+          <TextField
+            label="Feedback"
+            name="feedback"
+            value={formData.feedback}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            multiline
+            rows={4}
+            required
+            error={!!errors.feedback}
+            helperText={errors.feedback}
+          />
+          <Button 
+            type="submit" 
+            variant="contained" 
+            color="primary" 
+            fullWidth 
+            disabled={loading}
+            sx={{ mt: 2 }}
+          >
+            {loading ? <CircularProgress size={24} /> : 'Submit'}
+          </Button>
+        </form>
+        <Slide direction="up" in={submitted} mountOnEnter unmountOnExit>
+          <Typography variant="body1" style={{ marginTop: '20px', textAlign: 'center' }}>
+            Thank you for your feedback!
+          </Typography>
+        </Slide>
+      </FormBox>
     </Container>
   );
 };
