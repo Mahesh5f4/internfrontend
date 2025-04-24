@@ -1,6 +1,6 @@
-// src/components/AdminView.jsx
 import React, { useState } from 'react';
-import { Button, Container, Typography, List, ListItem, ListItemText, Slide } from '@mui/material';
+import { Button, Container, Typography, Card, CardContent, CardActions, Slide, Box } from '@mui/material';
+import { styled } from '@mui/system';
 
 const AdminView = () => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -23,6 +23,16 @@ const AdminView = () => {
     setShowFeedbacks(!showFeedbacks);
   };
 
+  // Styled Card with 3D effect
+  const FeedbackCard = styled(Card)(({ theme }) => ({
+    transition: 'transform 0.3s, box-shadow 0.3s',
+    '&:hover': {
+      transform: 'scale(1.05)',
+      boxShadow: '0 10px 20px rgba(0, 0, 0, 0.15)',
+    },
+    marginBottom: theme.spacing(2),
+  }));
+
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" gutterBottom>
@@ -32,16 +42,27 @@ const AdminView = () => {
         {showFeedbacks ? 'Hide Submitted Feedback' : 'View Submitted Feedback'}
       </Button>
       <Slide direction="down" in={showFeedbacks} mountOnEnter unmountOnExit>
-        <List>
+        <Box sx={{ mt: 3 }}>
           {feedbacks.map((feedback, index) => (
-            <ListItem key={index}>
-              <ListItemText
-                primary={feedback.name}
-                secondary={`Email: ${feedback.email}\nFeedback: ${feedback.feedback}\nSubmitted on: ${new Date(feedback.timestamp).toLocaleString()}`}
-              />
-            </ListItem>
+            <FeedbackCard key={index}>
+              <CardContent>
+                <Typography variant="h6">{feedback.name}</Typography>
+                <Typography color="textSecondary" variant="body2">
+                  {`Email: ${feedback.email}`}
+                </Typography>
+                <Typography variant="body1" paragraph>
+                  Feedback: {feedback.feedback}
+                </Typography>
+                <Typography variant="caption" color="textSecondary">
+                  Submitted on: {new Date(feedback.timestamp).toLocaleString()}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                {/* Optional actions like "Delete" or "Reply" could go here */}
+              </CardActions>
+            </FeedbackCard>
           ))}
-        </List>
+        </Box>
       </Slide>
     </Container>
   );
